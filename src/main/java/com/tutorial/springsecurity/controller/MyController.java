@@ -1,5 +1,6 @@
 package com.tutorial.springsecurity.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class MyController {
 
     @GetMapping("/security")
-    public String testController()
+    public String testController(HttpServletRequest req)
     {
-        return "This is a demo page";
+        return "This is a demo page "+ "with Session Id "+req.getSession().getId();
     }
 }
