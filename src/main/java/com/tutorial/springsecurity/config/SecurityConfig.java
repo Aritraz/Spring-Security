@@ -15,10 +15,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain config(HttpSecurity security)
     {
-
         return security
                 .formLogin(Customizer.withDefaults())
-                .httpBasic(http->http.disable())
+                .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth-> auth.anyRequest().authenticated())
                 .build();
     }
