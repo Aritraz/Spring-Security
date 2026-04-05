@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -30,6 +31,7 @@ public class SecurityConfig {
 
         return security
                 .formLogin(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth-> auth.anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.NEVER))
@@ -49,8 +51,13 @@ public class SecurityConfig {
     {
         System.out.println("I am inside authenticationProvider");
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
-        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());//Important ! Otherwise exception
+        //provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());//Important ! Otherwise exception
         //will be thrown
+
+        //Changing No-op password encoder to Bycrypt , as we are using Bcrypt to encode password
+        //While registering.
+
+        provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
         return provider;
     }
 
