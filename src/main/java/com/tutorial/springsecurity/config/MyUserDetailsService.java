@@ -21,6 +21,8 @@ public class MyUserDetailsService implements UserDetailsService {
 
        if(user == null)
        {
+           // Even if no user found , it wont throw exception , Spring will automatically handle
+           //this and return 401 unauthorized
            throw new UsernameNotFoundException("No User Found");
        }
        return new UserPrinciple(user);
