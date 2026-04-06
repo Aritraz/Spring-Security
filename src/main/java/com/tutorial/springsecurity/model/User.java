@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.util.List;
+
 @Entity
 @Table(name="users")
 public class User {
@@ -14,16 +16,25 @@ public class User {
     private String userId;
     private String username;
     private String password;
+    private List<String> roles;
 
     public User()
     {
 
     }
-    public User(String userId, String username, String password) {
-        this.userId = userId;
+
+    public User(String username, String password, List<String> roles) {
         this.username = username;
         this.password = password;
+        this.roles = roles;
+    }
 
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 
     public String getUserId() {
@@ -50,13 +61,13 @@ public class User {
         this.password = password;
     }
 
-
     @Override
     public String toString() {
         return "User{" +
                 "userId='" + userId + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 }

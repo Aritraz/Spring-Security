@@ -26,14 +26,14 @@ public class SecurityConfig {
     @Autowired
     private JwtFilter jwtFilter;
     @Bean
-    public SecurityFilterChain config(HttpSecurity security) throws Exception {
+    public SecurityFilterChain config(HttpSecurity security)  throws Exception {
 
         return security
                 .formLogin(cust -> cust.disable())
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(requst ->
-                        requst.requestMatchers("/login").permitAll()
+                        requst.requestMatchers("/login" , "/register").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter , UsernamePasswordAuthenticationFilter.class)
