@@ -34,13 +34,18 @@ public class JWTService {
 
     public String getToken(User user)
     {
+
+
+        this.claims.put("role",user.getRole());
+        System.out.println("ROLES "+ user.getRole());
         return Jwts.builder()
-                .claims(claims)
+                .claim("claims",claims)
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis()+60*60*40))
+                .expiration(new Date(System.currentTimeMillis()+60*60*40*100))
                 .signWith(getSigningKey())
                 .compact();
+
     }
 
     public SecretKey getSigningKey()

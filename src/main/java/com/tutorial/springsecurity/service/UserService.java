@@ -1,6 +1,5 @@
 package com.tutorial.springsecurity.service;
 
-import com.tutorial.springsecurity.dto.UserRegistrationRequest;
 import com.tutorial.springsecurity.model.User;
 import com.tutorial.springsecurity.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -27,28 +27,12 @@ public class UserService {
 
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
-    public User registerUser(UserRegistrationRequest user)
+    public User registerUser(User user)
     {
-        User registerUser = new User();
-
-        registerUser.setUserId(user.getUserid());
-        registerUser.setPassword(encoder.encode(user.getPassword()));
-        registerUser.setUsername(user.getUsername());
-
-        if(user.getRole().equalsIgnoreCase("ADMIN"))
-        {
-            //Register User with ADMIN , USER role
-            registerUser.setRoles(Arrays.asList("ADMIN","USER"));
-
-        }
-
-        //Register User with USER role
-        else {
-
-            registerUser.setRoles(Arrays.asList("USER"));
-        }
-        userRepository.save(registerUser);
-        return registerUser;
+        String userId = UUID.randomUUID().toString();
+        user.setUserId(userId);
+        user.setPassword(encoder.encode(user.getPassword()));
+        return userRepository.save(user);
 
     }
 
@@ -62,9 +46,12 @@ public class UserService {
 
         if(authObject.isAuthenticated())
         {
+            User existingUser = userRepository.findByUsername(user.getUsername());
+            HashMap<String , Object> claims = new HashMap<>();
+            claims.put("role",existingUser.getRole());
             //TODO
             //USER AUTHENTICATED GENERATE TOKEN
-            return jwtService.getToken(user);
+            return jwtService.getToken(existingUser);
 
         }
         else {

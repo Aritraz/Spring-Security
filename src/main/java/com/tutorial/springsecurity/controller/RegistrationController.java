@@ -1,6 +1,5 @@
 package com.tutorial.springsecurity.controller;
 
-import com.tutorial.springsecurity.dto.UserRegistrationRequest;
 import com.tutorial.springsecurity.model.User;
 import com.tutorial.springsecurity.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,9 @@ public class RegistrationController {
     private UserService userService;
 
     @PostMapping("/register")
-    public User register(@RequestBody UserRegistrationRequest user)
+    public User register(@RequestBody User user)
     {
+        System.out.println(user.toString());
         return userService.registerUser(user);
     }
 
